@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ActivityIndicator, View, Text } from 'react-native';
 import axios from 'axios';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function TabTwoScreen({ navigation }) {
-  const [activeTab, setActiveTab] = useState(0);
+import DetailPage from './DetailPage'; // Adjust the path to DetailPage as needed
+
+const Stack = createStackNavigator();
+
+export default function TabTwoScreen() {
   const [prosesData, setProsesData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const tabs = [
-    { title: 'Tab 1', screen: 'Screen1' },
-    { title: 'Tab 2', screen: 'Screen2' },
-    { title: 'Tab 3', screen: 'Screen3' },
-  ];
-
   useEffect(() => {
-    if (activeTab === 0) {
-      fetchData();
-    }
-  }, [activeTab]);
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -32,7 +29,6 @@ export default function TabTwoScreen({ navigation }) {
   };
 
   const navigateToDetail = (id) => {
-    // Navigasi ke halaman detail dengan membawa parameter id
     navigation.navigate('DetailPage', { id });
   };
 
@@ -47,30 +43,16 @@ export default function TabTwoScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Proses Pembelajaran</Text>
-      <View style={styles.tabContainer}>
-        {tabs.map((tab, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.tabButton, activeTab === index && styles.activeTabButton]}
-            onPress={() => setActiveTab(index)}>
-            <Text style={styles.tabButtonText}>{tab.title}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
-      {activeTab === 0 && (
-        <View>
-          {isLoading ? (
-            <ActivityIndicator size="large" color="#007bff" />
-          ) : (
-            <View style={styles.itemContainer}>
-              {renderProsesData()}
-            </View>
-          )}
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      
+      {isLoading ? (
+        <ActivityIndicator style={{ marginTop: 20 }} size="large" color="#007bff" />
+      ) : (
+        <View style={styles.itemContainer}>
+          {renderProsesData()}
         </View>
       )}
-
     </View>
   );
 }
@@ -83,24 +65,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
-  },
-  tabButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 10,
-    backgroundColor: '#eee',
-    marginHorizontal: 5,
-  },
-  activeTabButton: {
-    backgroundColor: '#007bff',
-  },
-  tabButtonText: {
-    color: '#000',
     fontWeight: 'bold',
   },
   separator: {
