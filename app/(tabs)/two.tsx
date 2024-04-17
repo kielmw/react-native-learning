@@ -1,14 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ActivityIndicator, View, Text } from 'react-native';
 import axios from 'axios';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-import DetailPage from './DetailPage'; // Adjust the path to DetailPage as needed
 
-const Stack = createStackNavigator();
+type RootStackParamList = {
+  DetailPage: { idKelas: string };
+};
 
-export default function TabTwoScreen() {
+type TabTwoScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DetailPage'>;
+
+type Props = {
+  navigation: TabTwoScreenNavigationProp;
+};
+
+// Define the DetailPage component
+const DetailPage: React.FC<{ route: { params: { idKelas: string } } }> = ({ route }) => {
+  const { idKelas } = route.params;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Detail Page</Text>
+      <Text>ID Kelas: {idKelas}</Text>
+    </View>
+  );
+};
+
+export default function TabTwoScreen({ navigation }: Props) {
   const [prosesData, setProsesData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,8 +45,9 @@ export default function TabTwoScreen() {
     }
   };
 
-  const navigateToDetail = (id) => {
-    navigation.navigate('DetailPage', { id });
+  // Navigate to DetailPage
+  const navigateToDetail = (idKelas: string) => { 
+    navigation.navigate('DetailPage', { idKelas });
   };
 
   const renderProsesData = () => {

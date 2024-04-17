@@ -8,8 +8,11 @@ import React, { useState } from 'react';
 import { useColorScheme } from '@/components/useColorScheme';
 import TabTwoScreen from './(tabs)/two';
 import { Stack } from 'expo-router';
-import DetailPage from './(tabs)/DetailPage'; // Sesuaikan dengan path file DetailPage Anda
 import { createStackNavigator } from '@react-navigation/stack';
+import ModalScreen from './modal';
+// import TabLayout from './(tabs)/_layout';
+import DetailPage from './DetailPage';
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,13 +53,25 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const Stack = createStackNavigator();
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
+      <Stack.Navigator>
+        <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
+      </Stack.Navigator>
     </ThemeProvider>
   );
 }
+
+function TabLayout() {
+  const Stack = createStackNavigator();
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="(tabs)" component={TabTwoScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="DetailPage" component={DetailPage} />
+    </Stack.Navigator>
+  );
+}
+
