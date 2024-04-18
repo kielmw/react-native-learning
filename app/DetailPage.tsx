@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { RouteProp } from '@react-navigation/native';
+import { StyleSheet, TouchableOpacity} from 'react-native';
+import PDFViewer from 'your-pdf-viewer-library'; // Import the PDF viewer component
+
 
 type InTabLayout = {
   DetailPage: { idKelas: string };
@@ -41,18 +44,56 @@ const DetailPage: React.FC<Props> = ({ route }) => {
 
   return (
     <View>
-      <Text>Detail Page</Text>
       <Text>ID: {idKelas}</Text>
       {isLoading ? (
         <ActivityIndicator size="large" color="#007bff" />
       ) : (
         <View>
           {/* Render the fetched data here */}
+          <Text>Kelas: {detailData?.namaKelas}</Text>
           <Text>Youtube: {detailData?.videoKelas}</Text>
+          {/* Check if pdfs and fileName exist before mapping */}
+          {detailData?.pdfs && detailData.pdfs.idPdf ? (
+            detailData.pdfs.idPdf.map((idPdf, index) => (
+              <Text key={index} style={styles.itemText}>{idPdf}</Text>
+            ))
+          ) : (
+            <Text>No PDFs available</Text>
+          )}
         </View>
       )}
     </View>
-  );
-};
+  );  
+
+}
 
 export default DetailPage;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
+  },
+  itemContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  itemButton: {
+    padding: 10,
+    backgroundColor: '#eee',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  itemText: {
+    fontSize: 16,
+  },
+});
