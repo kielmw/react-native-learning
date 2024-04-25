@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, Alert , Button} from 'react-native';
 import axios from 'axios';
 import { RouteProp } from '@react-navigation/native';
-import PDFViewer from 'your-pdf-viewer-library'; // Import the PDF viewer component
+import PDFView from 'react-native-pdf';
+import RNFS from 'react-native-fs';
+import { Linking } from 'react-native';
 
 type InTabLayout = {
   DetailPage: { idKelas: string };
@@ -39,6 +41,19 @@ const DetailPage: React.FC<Props> = ({ route }) => {
       // Cancel any ongoing fetch requests here if necessary
     };
   }, [idKelas]);
+  const handleDownload = async (idKelas, pdfId) => {
+    try {
+        const downloadUrl = `http://10.0.2.2:8080/api/proses/pdf/download/${idKelas}/${pdfId}`;
+
+        // Open the download URL
+        await Linking.openURL(downloadUrl);
+
+        console.log('File download initiated.');
+    } catch (error) {
+        console.error('Error downloading PDF: ', error);
+    }
+};
+
 
   return (
     <View style={styles.container}>
@@ -53,7 +68,9 @@ const DetailPage: React.FC<Props> = ({ route }) => {
           {/* Render the PDF Viewer */}
           {detailData?.pdfs && detailData.pdfs.length > 0 ? (
             detailData.pdfs.map((pdf: any, index: number) => (
-              <Text key={index} style={styles.itemText}>{pdf.fileName}</Text>
+              <TouchableOpacity key={index} onPress={() => handleDownload(idKelas,pdf.idPdf)}>
+                <Text style={styles.itemText}>{pdf.fileName}</Text>
+              </TouchableOpacity>
             ))
           ) : (
             <Text>No PDFs available</Text>
@@ -76,6 +93,9 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
+    marginVertical: 5,
+    textDecorationLine: 'underline',
+    color: 'blue',
   },
 });
 
