@@ -48,7 +48,7 @@ const DetailPage: React.FC<Props> = ({ route }) => {
         // Open the download URL
         await Linking.openURL(downloadUrl);
 
-        console.log('File download initiated.');
+        console.log('File download initiated.'); 
     } catch (error) {
         console.error('Error downloading PDF: ', error);
     }
