@@ -64,7 +64,7 @@ return (
         <ActivityIndicator size="large" color="#007bff" />
       ) : (
         <View>
-          {detailData.length > 0 ? (
+          {detailData?.length > 0 ? (
             detailData.map((dataItem, index) => (
               <View key={index}>
                 <Text>Pertemuan minggu ke - {dataItem.idPertemuan}</Text>
