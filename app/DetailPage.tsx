@@ -5,6 +5,7 @@ import { RouteProp } from '@react-navigation/native';
 import PDFView from 'react-native-pdf';
 import RNFS from 'react-native-fs';
 import { Linking } from 'react-native';
+import { ScrollView } from 'react-native';
 
 type InTabLayout = {
   DetailPage: { idKelas: string };
@@ -25,17 +26,17 @@ const DetailPage: React.FC<Props> = ({ route }) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://10.0.2.2:8080/api/proses/${idKelas}`);
-        setDetailData(response.data);
+        const response = await axios.get(`http://10.0.2.2:8080/api/proses/itemPembelajaran/get/${idKelas}`);
+        setDetailData(response.data); // Assuming response.data is an array of objects
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data: ', error);
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
-
+  
     // Clean-up function to cancel the fetch request if the component unmounts or the idKelas changes
     return () => {
       // Cancel any ongoing fetch requests here if necessary
@@ -55,48 +56,65 @@ const DetailPage: React.FC<Props> = ({ route }) => {
 };
 
 
-  return (
-    <View style={styles.container}>
+return (
+  <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <View style={[styles.container, styles.pageContainer]}>
       <Text style={styles.title}>Detail Page</Text>
-      <Text>ID: {idKelas}</Text>
       {isLoading ? (
         <ActivityIndicator size="large" color="#007bff" />
       ) : (
         <View>
-          <Text>Kelas: {detailData?.namaKelas}</Text>
-          <Text>Youtube: {detailData?.videoKelas}</Text>
-          {/* Render the PDF Viewer */}
-          {detailData?.pdfs && detailData.pdfs.length > 0 ? (
-            detailData.pdfs.map((pdf: any, index: number) => (
-              <TouchableOpacity key={index} onPress={() => handleDownload(idKelas,pdf.idPdf)}>
-                <Text style={styles.itemText}>{pdf.fileName}</Text>
-              </TouchableOpacity>
+          {detailData.length > 0 ? (
+            detailData.map((dataItem, index) => (
+              <View key={index}>
+                <Text>Pertemuan minggu ke - {dataItem.idPertemuan}</Text>
+                {/* Render other data properties */}
+                {dataItem.idPdf && dataItem.fileName ? (
+                  <TouchableOpacity onPress={() => handleDownload(idKelas, dataItem.idPdf)}>
+                    <View>
+                      <Text style={styles.itemText}>{dataItem.fileName}</Text>
+                      <Text>ID Pertemuan: {dataItem.idPertemuan}</Text>
+                      <Text>Heading Pertemuan: {dataItem.headingPertemuan}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <Text>No PDFs available</Text>
+                )}
+              </View>
             ))
           ) : (
-            <Text>No PDFs available</Text>
+            <Text>No data available</Text>
           )}
         </View>
       )}
     </View>
-  );
+  </ScrollView>
+);
+
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  pageContainer: {
+    marginHorizontal: 20, // Add margin of 20px on left and right sides
+  },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 20,
   },
   itemText: {
     fontSize: 16,
-    marginVertical: 5,
-    textDecorationLine: 'underline',
-    color: 'blue',
+    fontWeight: 'bold',
   },
 });
+
 
 export default DetailPage;
