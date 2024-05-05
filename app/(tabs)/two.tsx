@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 
 type RootStackParamList = {
-  DetailPage: { idKelas: string };
+  DetailPage: { idKelas: string , namaKelas:string };
 };
 
 type TabTwoScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DetailPage'>;
@@ -15,15 +15,17 @@ type Props = {
 };
 
 // Define the DetailPage component
-const DetailPage: React.FC<{ route: { params: { idKelas: string } } }> = ({ route }) => {
-  const { idKelas } = route.params;
+const DetailPage: React.FC<{ route: { params: { idKelas: string, namaKelas: string } } }> = ({ route }) => {
+  const { idKelas, namaKelas } = route.params;
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Detail Page</Text>
       <Text>ID Kelas: {idKelas}</Text>
+      <Text>Nama Kelas: {namaKelas}</Text>
     </View>
   );
 };
+
 
 export default function TabTwoScreen({ navigation }: Props) {
   const [prosesData, setProsesData] = useState([]);
@@ -46,13 +48,17 @@ export default function TabTwoScreen({ navigation }: Props) {
   };
 
   // Navigate to DetailPage
-  const navigateToDetail = (idKelas: string) => { 
-    navigation.navigate('DetailPage', { idKelas });
+  const navigateToDetail = (idKelas: string , namaKelas: string) => { 
+    navigation.navigate('DetailPage', { idKelas , namaKelas });
   };
 
   const renderProsesData = () => {
     return prosesData.map((item, index) => (
-      <TouchableOpacity key={index} style={styles.itemButton} onPress={() => navigateToDetail(item.idKelas)}>
+        <TouchableOpacity 
+          key={index} 
+          style={styles.itemButton} 
+          onPress={() => navigateToDetail(item.idKelas, item.namaKelas)}
+        >
         <Text style={styles.itemText}>{item.idKelas} - {item.namaKelas}</Text>
       </TouchableOpacity>
     ));

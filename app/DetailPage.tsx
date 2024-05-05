@@ -8,7 +8,7 @@ import { Linking } from 'react-native';
 import { ScrollView } from 'react-native';
 
 type InTabLayout = {
-  DetailPage: { idKelas: string };
+  DetailPage: { idKelas: string , namaKelas: string};
 };
 
 type DetailPageRouteProp = RouteProp<InTabLayout>;
@@ -19,6 +19,7 @@ type Props = {
 
 const DetailPage: React.FC<Props> = ({ route }) => {
   const { idKelas } = route.params;
+  const { namaKelas } = route.params;
   const [detailData, setDetailData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -59,7 +60,7 @@ const DetailPage: React.FC<Props> = ({ route }) => {
 return (
   <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={[styles.container, styles.pageContainer]}>
-      <Text style={styles.title}>Detail Page</Text>
+      <Text style={styles.title}>{namaKelas}</Text>
       {isLoading ? (
         <ActivityIndicator size="large" color="#007bff" />
       ) : (
@@ -69,13 +70,13 @@ return (
               <View key={index} style={styles.pertemuanContainer}>
                 <Text style={styles.pertemuanText}>Pertemuan minggu ke - {dataItem.idPertemuan}</Text>
                 {/* Render other data properties */}
-                <TouchableOpacity onPress={() => handleDownload(idKelas, dataItem.idPdf)}>
-                  <View style={styles.downloadContainer}>
-                    <Text style={styles.headingPertemuan}>Heading Pertemuan: {dataItem.headingPertemuan}</Text>
-                    <Text style={styles.bodyPertemuan}>Body Pertemuan: {dataItem.bodyPertemuan}</Text>
+                <View style={styles.downloadContainer}>
+                  <Text style={styles.headingPertemuan}>Heading Pertemuan: {dataItem.headingPertemuan}</Text>
+                  <Text style={styles.bodyPertemuan}>Body Pertemuan: {dataItem.bodyPertemuan}</Text>
+                  <TouchableOpacity onPress={() => handleDownload(idKelas, dataItem.idPdf)}>
                     <Text style={styles.itemText}><Text style={styles.fileNameText}>{dataItem.fileName}</Text></Text>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
               </View>
             ))
           ) : (
@@ -86,7 +87,6 @@ return (
     </View>
   </ScrollView>
 );
-
 
 };
 
