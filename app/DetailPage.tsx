@@ -66,20 +66,16 @@ return (
         <View>
           {detailData?.length > 0 ? (
             detailData.map((dataItem, index) => (
-              <View key={index}>
-                <Text>Pertemuan minggu ke - {dataItem.idPertemuan}</Text>
+              <View key={index} style={styles.pertemuanContainer}>
+                <Text style={styles.pertemuanText}>Pertemuan minggu ke - {dataItem.idPertemuan}</Text>
                 {/* Render other data properties */}
-                {dataItem.idPdf && dataItem.fileName ? (
-                  <TouchableOpacity onPress={() => handleDownload(idKelas, dataItem.idPdf)}>
-                    <View>
-                      <Text style={styles.itemText}>{dataItem.fileName}</Text>
-                      <Text>ID Pertemuan: {dataItem.idPertemuan}</Text>
-                      <Text>Heading Pertemuan: {dataItem.headingPertemuan}</Text>
-                    </View>
-                  </TouchableOpacity>
-                ) : (
-                  <Text>No PDFs available</Text>
-                )}
+                <TouchableOpacity onPress={() => handleDownload(idKelas, dataItem.idPdf)}>
+                  <View style={styles.downloadContainer}>
+                    <Text style={styles.headingPertemuan}>Heading Pertemuan: {dataItem.headingPertemuan}</Text>
+                    <Text style={styles.bodyPertemuan}>Body Pertemuan: {dataItem.bodyPertemuan}</Text>
+                    <Text style={styles.itemText}><Text style={styles.fileNameText}>{dataItem.fileName}</Text></Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             ))
           ) : (
@@ -91,6 +87,7 @@ return (
   </ScrollView>
 );
 
+
 };
 
 const styles = StyleSheet.create({
@@ -99,22 +96,45 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
   },
   pageContainer: {
-    marginHorizontal: 20, // Add margin of 20px on left and right sides
+    alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  itemText: {
+  pertemuanContainer: {
+    backgroundColor: '#eee',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  pertemuanText: {
     fontSize: 16,
     fontWeight: 'bold',
   },
+  downloadContainer: {
+    paddingTop: 10,
+  },
+  headingPertemuan: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  bodyPertemuan: {
+    fontSize: 16,
+  },
+  itemText: {
+    fontSize: 14,
+    color: '#007bff',
+  },
+  fileNameText: {
+    color: 'grey',
+  },
 });
+
 
 
 export default DetailPage;
