@@ -71,8 +71,8 @@ return (
                 <Text style={styles.pertemuanText}>Pertemuan minggu ke - {dataItem.idPertemuan}</Text>
                 {/* Render other data properties */}
                 <View style={styles.downloadContainer}>
-                  <Text style={styles.headingPertemuan}>Heading Pertemuan: {dataItem.headingPertemuan}</Text>
-                  <Text style={styles.bodyPertemuan}>Body Pertemuan: {dataItem.bodyPertemuan}</Text>
+                  <Text style={styles.headingPertemuan}>{dataItem.headingPertemuan}</Text>
+                  <Text style={styles.bodyPertemuan}>{dataItem.bodyPertemuan}</Text>
                   <TouchableOpacity onPress={() => handleDownload(idKelas, dataItem.idPdf)}>
                     <Text style={styles.itemText}><Text style={styles.fileNameText}>{dataItem.fileName}</Text></Text>
                   </TouchableOpacity>
