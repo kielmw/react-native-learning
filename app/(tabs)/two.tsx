@@ -38,7 +38,7 @@ export default function TabTwoScreen({ navigation }: Props) {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://10.0.2.2:8080/api/proses');
+      const response = await axios.get('https://3b29-182-253-50-137.ngrok-free.app/api/proses/nim/101');
       setProsesData(response.data);
       setIsLoading(false);
     } catch (error) {

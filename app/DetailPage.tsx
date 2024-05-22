@@ -27,7 +27,7 @@ const DetailPage: React.FC<Props> = ({ route }) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://10.0.2.2:8080/api/proses/itemPembelajaran/get/${idKelas}`);
+        const response = await axios.get(`https://3b29-182-253-50-137.ngrok-free.app/api/proses/itemPembelajaran/get/${idKelas}`);
         setDetailData(response.data); // Assuming response.data is an array of objects
         setIsLoading(false);
       } catch (error) {
@@ -45,11 +45,9 @@ const DetailPage: React.FC<Props> = ({ route }) => {
   }, [idKelas]);
   const handleDownload = async (idKelas, pdfId) => {
     try {
-        const downloadUrl = `http://10.0.2.2:8080/api/proses/pdf/download/${idKelas}/${pdfId}`;
-
+        const downloadUrl = `https://3b29-182-253-50-137.ngrok-free.app/api/proses/pdf/download/${idKelas}/${pdfId}`;
         // Open the download URL
         await Linking.openURL(downloadUrl);
-
         console.log('File download initiated.'); 
     } catch (error) {
         console.error('Error downloading PDF: ', error);
